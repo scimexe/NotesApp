@@ -21,10 +21,13 @@ public class NoteController {
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Note> getNoteById(@PathVariable("id") Long id){
-        Note note = noteService.findNoteById(id);
-        return new ResponseEntity<>(note, HttpStatus.OK);
+    @GetMapping("/{str}")
+    public ResponseEntity <List <Note>> getNote(@PathVariable("str") String str){
+        List <Note> notes = noteService.findNoteByTitle(str);
+        if (notes.isEmpty()) {
+            notes = noteService.findNoteByDesc(str);
+        }
+        return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
     @PostMapping
