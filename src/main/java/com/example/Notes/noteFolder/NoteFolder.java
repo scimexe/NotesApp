@@ -4,12 +4,11 @@ import java.util.Date;
 import com.example.Notes.note.Note;
 import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.CascadeType;
+import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -20,6 +19,8 @@ import static jakarta.persistence.CascadeType.ALL;
 @ToString
 @Builder
 
+@SQLDelete(sql = "UPDATE note_folder SET deleted = 1 WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class NoteFolder {
 
@@ -33,7 +34,8 @@ public class NoteFolder {
     @CreationTimestamp
     private Date createdAt;
 
+    private boolean deleted = Boolean.FALSE;
+
     @OneToMany(cascade = ALL, mappedBy = "noteFolder", orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List <Note> notes;
+    public List <Note> notes;
 }

@@ -4,10 +4,11 @@ import com.example.Notes.noteFolder.NoteFolder;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,6 +16,8 @@ import java.util.Date;
 @ToString
 @Builder
 
+@SQLDelete(sql = "UPDATE note SET deleted = 1 WHERE id=?")
+@Where(clause = "deleted=false")
 @Entity
 public class Note {
     @Id
@@ -33,8 +36,10 @@ public class Note {
     @UpdateTimestamp
     private Date modifiedAt;
 
+    private boolean deleted = Boolean.FALSE;
+
     @ManyToOne
     @JoinColumn(name = "noteFolder_Id")
-    private NoteFolder noteFolder;
+    public NoteFolder noteFolder;
 
 }
