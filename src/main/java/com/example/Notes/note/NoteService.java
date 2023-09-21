@@ -12,13 +12,13 @@ import java.util.Optional;
 public class NoteService {
 
     private final NoteRepo noteRepo;
+
     public NoteService(NoteRepo noteRepo) {
         this.noteRepo = noteRepo;
     }
 
     public Note findNoteById(Long id){
-        return noteRepo.findNoteById(id)
-                .orElseThrow(()-> new NotFoundException("Note by id " + id + " was not found"));
+        return noteRepo.findNoteById(id).orElseThrow(()-> new NotFoundException("Note by id " + id + " was not found."));
     }
 
     public List <Note> findNoteByDesc(String description){
@@ -33,9 +33,9 @@ public class NoteService {
         return noteRepo.findAll();
     }
 
-    public Note addNote(Note note){
+    public Note addNote(Note newNote){
 
-        return noteRepo.save(note);
+        return noteRepo.save(newNote);
     }
 
     public Note updateNoteById(Long id, Note note){
