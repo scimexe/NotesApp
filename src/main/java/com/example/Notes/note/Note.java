@@ -1,5 +1,6 @@
 package com.example.Notes.note;
 
+import com.example.Notes.noteFolder.NoteFolder;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,10 +28,13 @@ public class Note {
     private String description;
 
     @CreationTimestamp
-    @Column(nullable = false)
     private Date createdAt;
 
     @UpdateTimestamp
     private Date modifiedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "noteFolder_Id")
+    private NoteFolder noteFolder;
 
 }
