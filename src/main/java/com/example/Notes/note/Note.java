@@ -21,22 +21,16 @@ public class Note {
     private Long id;
 
     @Column(nullable = false)
-    private String titolo;
+    private String title;
 
     @Column(nullable = false)
-    private String descrizione;
-
-    @Column(nullable = false)
-    private boolean inUso;
+    private String description;
 
     @CreationTimestamp
     @Column(nullable = false)
-    private Date dataCreazione;
+    private Date createdAt;
 
     @UpdateTimestamp
-    private Date dataModifica;
-
-    @Column(updatable = false)
-    private String firmaCreazione;
+    private Date modifiedAt;
 
 }

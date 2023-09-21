@@ -6,6 +6,7 @@ import java.util.Optional;
 @Repository
 public interface NoteRepo extends JpaRepository<Note, Long> {
     Optional <Note> findNoteById(Long id);
+    
     void deleteNoteById(Long id);
 }
 

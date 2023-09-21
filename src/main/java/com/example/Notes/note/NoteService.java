@@ -1,6 +1,6 @@
 package com.example.Notes.note;
 
-import com.example.Notes.exception.NoteNotFoundException;
+import com.example.Notes.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,24 +20,21 @@ public class NoteService {
 
     public Note findNoteById(Long id){
         return noteRepo.findNoteById(id)
-                .orElseThrow(()-> new NoteNotFoundException("Note by id " + id + " was not found"));
+                .orElseThrow(()-> new NotFoundException("Note by id " + id + " was not found"));
     }
     public List<Note> findAllNotes(){
         return noteRepo.findAll();
     }
     public Note addNote(Note note){
 
-        note.setFirmaCreazione("Andrea");
         return noteRepo.save(note);
     }
     public Note updateNoteById(Long id, Note note){
 
         Optional<Note> noteToUpdate = noteRepo.findNoteById(id);
 
-        noteToUpdate.get().setTitolo(note.getTitolo());
-        noteToUpdate.get().setDescrizione(note.getDescrizione());
-        noteToUpdate.get().setInUso(note.isInUso());
-
+        noteToUpdate.get().setTitle(note.getTitle());
+        noteToUpdate.get().setDescription(note.getDescription());
         return noteRepo.save(noteToUpdate.get());
     }
     void deleteNoteById(Long id){
