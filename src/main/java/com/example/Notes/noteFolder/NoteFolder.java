@@ -4,6 +4,7 @@ import java.util.Date;
 import com.example.Notes.note.Note;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import org.hibernate.annotations.*;
 
@@ -35,7 +36,7 @@ public class NoteFolder {
     private Date createdAt;
 
     private boolean deleted = Boolean.FALSE;
-
-    @OneToMany(cascade = ALL, mappedBy = "noteFolder", orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(cascade = ALL, mappedBy = "noteFolder", orphanRemoval = true, fetch = FetchType.LAZY)
     public List <Note> notes;
 }

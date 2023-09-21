@@ -1,7 +1,6 @@
 package com.example.Notes.noteFolder;
 
 import com.example.Notes.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

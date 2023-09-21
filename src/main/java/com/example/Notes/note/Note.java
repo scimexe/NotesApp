@@ -1,6 +1,7 @@
 package com.example.Notes.note;
 
 import com.example.Notes.noteFolder.NoteFolder;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,8 +39,8 @@ public class Note {
 
     private boolean deleted = Boolean.FALSE;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "noteFolder_Id")
     public NoteFolder noteFolder;
-
 }
