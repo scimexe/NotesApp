@@ -35,12 +35,7 @@ public class NoteController {
 
     @PostMapping
     public ResponseEntity<Note> addNote(@RequestBody NoteDTO noteDTO){
-        Note note = new Note();
-        note.setTitle(noteDTO.getTitle());
-        note.setDescription(noteDTO.getDescription());
-        note.setNoteFolder(noteFolderService.findNoteFolderById(noteDTO.getFolderId()));
-        noteService.addNote(note);
-        return new ResponseEntity<>(note, HttpStatus.CREATED);
+        return new ResponseEntity<>(noteService.addNote(noteDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
