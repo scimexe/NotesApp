@@ -1,8 +1,7 @@
 package com.example.Notes.note;
 
 import com.example.Notes.exception.NotFoundException;
-import com.example.Notes.noteFolder.NoteFolder;
-import com.example.Notes.noteFolder.NoteFolderService;
+import com.example.Notes.noteFolder.NoteFolderRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +13,10 @@ import java.util.Optional;
 public class NoteService {
 
     private final NoteRepo noteRepo;
-
-    public NoteService(NoteRepo noteRepo) {
+    private final NoteFolderRepo noteFolderRepo;
+    public NoteService(NoteRepo noteRepo, NoteFolderRepo noteFolderRepo) {
         this.noteRepo = noteRepo;
+        this.noteFolderRepo = noteFolderRepo;
     }
 
     public Note findNoteById(Long id){
@@ -36,14 +36,12 @@ public class NoteService {
     }
 
     public Note addNote(Note newNote) {
-
         return noteRepo.save(newNote);
     }
 
     public Note updateNoteById(Long id, Note note){
 
         Optional<Note> noteToUpdate = noteRepo.findNoteById(id);
-
         noteToUpdate.get().setTitle(note.getTitle());
         noteToUpdate.get().setDescription(note.getDescription());
         return noteRepo.save(noteToUpdate.get());

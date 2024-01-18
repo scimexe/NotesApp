@@ -1,5 +1,6 @@
 package com.example.Notes.note;
 
+import com.example.Notes.noteFolder.NoteFolderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,10 @@ import java.util.List;
 public class NoteController {
 
     private final NoteService noteService;
-    public NoteController(NoteService noteService) {
+    private final NoteFolderService noteFolderService;
+    public NoteController(NoteService noteService, NoteFolderService noteFolderService) {
         this.noteService = noteService;
+        this.noteFolderService = noteFolderService;
     }
     
     @GetMapping
@@ -31,9 +34,13 @@ public class NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<Note> addNote(@RequestBody Note note){
-        Note newNote = noteService.addNote(note);
-        return new ResponseEntity<>(newNote, HttpStatus.CREATED);
+    public ResponseEntity<Note> addNote(@RequestBody NoteDTO noteDTO){
+        Note note = new Note();
+        note.setTitle(noteDTO.getTitle());
+        note.setDescription(noteDTO.getDescription());
+        note.setNoteFolder(noteFolderService.findNoteFolderById(noteDTO.getFolderId()));
+        noteService.addNote(note);
+        return new ResponseEntity<>(note, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

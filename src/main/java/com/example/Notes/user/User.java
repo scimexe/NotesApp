@@ -1,6 +1,8 @@
 package com.example.Notes.user;
 
 import com.example.Notes.enumeration.Role;
+import com.example.Notes.noteFolder.NoteFolder;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +37,10 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {        //ritorna la lista di ruoli dell'utente
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
+
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List <NoteFolder> userFolders;
 
     @Override
     public String getUsername() {
