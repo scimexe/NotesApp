@@ -1,9 +1,9 @@
 package com.example.Notes.noteFolder;
 
-import com.example.Notes.note.Note;
+import com.example.Notes.user.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +14,13 @@ import java.util.List;
 public class NoteFolderController {
 
     private final NoteFolderService noteFolderService;
+    public NoteFolderController(NoteFolderService noteFolderService) {this.noteFolderService = noteFolderService;
 
-    public NoteFolderController(NoteFolderService noteFolderService) {this.noteFolderService = noteFolderService; }
+    }
 
     @GetMapping
-    public ResponseEntity<List <NoteFolder>> getAllNoteFolders(){
-        List<NoteFolder> noteFolders = noteFolderService.findAllNoteFolders();
+    public ResponseEntity<List <NoteFolder>> getAllNoteFolders(@AuthenticationPrincipal User user){
+        List<NoteFolder> noteFolders = noteFolderService.findNoteFolderByUserId(user.getId());
         return new ResponseEntity<>(noteFolders, HttpStatus.OK);
     }
 
@@ -31,8 +32,8 @@ public class NoteFolderController {
     }
 
     @PostMapping
-    public ResponseEntity<NoteFolder> addNoteFolder(@RequestBody NoteFolder noteFolder){
-        NoteFolder newNoteFolder = noteFolderService.addNoteFolder(noteFolder);
+    public ResponseEntity<NoteFolder> addNoteFolder(@AuthenticationPrincipal User user, @RequestBody NoteFolder noteFolder){
+        NoteFolder newNoteFolder = noteFolderService.addNoteFolder(user, noteFolder);
         return new ResponseEntity<>(newNoteFolder, HttpStatus.CREATED);
     }
 

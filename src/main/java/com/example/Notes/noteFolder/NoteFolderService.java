@@ -1,20 +1,22 @@
 package com.example.Notes.noteFolder;
 
 import com.example.Notes.exception.NotFoundException;
+import com.example.Notes.user.User;
+import com.example.Notes.user.UserRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
 public class NoteFolderService {
 
     private final NoteFolderRepo noteFolderRepo;
-
-    public NoteFolderService(NoteFolderRepo noteFolderRepo) {
+    private final UserRepo userRepo;
+    public NoteFolderService(NoteFolderRepo noteFolderRepo, UserRepo userRepo) {
         this.noteFolderRepo = noteFolderRepo;
+        this.userRepo = userRepo;
     }
 
     public NoteFolder findNoteFolderById(Long id){
@@ -29,14 +31,15 @@ public class NoteFolderService {
         return noteFolderRepo.findAll();
     }
 
-    public NoteFolder addNoteFolder(NoteFolder newNoteFolder){
+    public NoteFolder addNoteFolder(User user, NoteFolder newNoteFolder){
+        newNoteFolder.setUser(user);
         return noteFolderRepo.save(newNoteFolder);
     }
 
     public NoteFolder updateNoteFolder(Long id, NoteFolder noteFolder){
 
-        Optional<NoteFolder> noteFolderToUpdate = noteFolderRepo.findNoteFolderById(id);
-        return noteFolderRepo.save(noteFolderToUpdate.get());
+        NoteFolder noteFolderToUpdate = noteFolderRepo.findNoteFolderById(id);
+        return noteFolderRepo.save(noteFolderToUpdate);
     }
 
     public void deleteNoteFolder(Long id) {
@@ -46,4 +49,9 @@ public class NoteFolderService {
     public void deleteAllNoteFolder(){
         noteFolderRepo.deleteAll();
     }
+
+    public List<NoteFolder> findNoteFolderByUserId(Long userId) {
+        return noteFolderRepo.findNoteFolderByUserId(userId);
+    }
 }
+

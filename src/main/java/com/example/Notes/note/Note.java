@@ -14,7 +14,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Builder
 
 @SQLDelete(sql = "UPDATE note SET deleted = 1 WHERE id=?")
