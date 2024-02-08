@@ -52,6 +52,7 @@ build/
 !.vscode/extensions.json
 .history/*
 **/node_modules
+**/.angular
 
 # Miscellaneous
 /.angular/cache

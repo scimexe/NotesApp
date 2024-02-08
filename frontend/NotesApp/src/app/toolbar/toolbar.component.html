@@ -1,0 +1,16 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-toolbar>
+    <button mat-button>
+      {{ title }}
+    </button>
+  </mat-toolbar>
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon" aria-label="Login" matTooltip="Accedi/registrati" (click)="onClickLogin()">
+    <mat-icon>
+      <span class="material-symbols-outlined">login</span>
+    </mat-icon>
+  </button>
+</mat-toolbar>
