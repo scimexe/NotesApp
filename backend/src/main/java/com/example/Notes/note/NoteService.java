@@ -1,7 +1,8 @@
 package com.example.Notes.note;
 
-import com.example.Notes.exception.NotFoundException;
-import com.example.Notes.noteFolder.NoteFolderRepo;
+import com.example.Notes.Log.Log;
+import com.example.Notes.enumeration.LOG;
+import com.example.Notes.exception.NotesException;
 import com.example.Notes.noteFolder.NoteFolderService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,24 @@ public class NoteService {
     }
 
     public Note findNoteById(Long id){
-        return noteRepo.findNoteById(id).orElseThrow(()-> new NotFoundException("Note by id " + id + " was not found."));
+
+        //Sto cercando una nota per ID, deve essere presente a meno che non venga eliminata nel frattempo.
+        Optional <Note> note = noteRepo.findNoteById(id);
+        if(note.isEmpty()){
+            String msg = "Note with id " + id + " not found.";
+            Log.WriteLog(LOG.ERROR, msg);
+            throw new NotesException(msg);
+        }
+        var noteBuilded = Note.builder()
+                .id(note.get().getId())
+                .title(note.get().getTitle())
+                .description(note.get().getDescription())
+                .createdAt(note.get().getCreatedAt())
+                .modifiedAt(note.get().getModifiedAt())
+                .deleted(note.get().isDeleted())
+                .noteFolder(note.get().getNoteFolder())
+                .build();
+        return noteBuilded;
     }
 
     public List <Note> findNoteByDesc(String description){

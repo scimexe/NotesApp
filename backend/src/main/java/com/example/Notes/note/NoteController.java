@@ -1,5 +1,7 @@
 package com.example.Notes.note;
 
+import com.example.Notes.Log.Log;
+import com.example.Notes.enumeration.LOG;
 import com.example.Notes.noteFolder.NoteFolderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ public class NoteController {
         this.noteService = noteService;
         this.noteFolderService = noteFolderService;
     }
-    
+
     @GetMapping
     public ResponseEntity<List <Note>> getAllNotes(){
         List<Note> notes = noteService.findAllNotes();
@@ -26,11 +28,26 @@ public class NoteController {
 
     @GetMapping("/{str}")
     public ResponseEntity <List <Note>> getNote(@PathVariable("str") String str){
-        List <Note> notes = noteService.findNoteByTitle(str);
-        if (notes.isEmpty()) {
-            notes = noteService.findNoteByDesc(str);
+
+        boolean isLong = true;
+        try{
+            Long.parseLong(str);
         }
-        return new ResponseEntity<>(notes, HttpStatus.OK);
+        catch (NumberFormatException e){
+            isLong = false;
+            Log.WriteLog(LOG.INFO, "Note with id " + str + " not found.");
+        }
+        finally {
+            if(isLong) {
+                Note note = noteService.findNoteById(Long.parseLong(str));
+                return new ResponseEntity(note, HttpStatus.OK);
+            }
+            List<Note> notes = noteService.findNoteByTitle(str);
+            if (notes.isEmpty()) {
+                notes = noteService.findNoteByDesc(str);
+            }
+            return new ResponseEntity<>(notes, HttpStatus.OK);
+        }
     }
 
     @PostMapping

@@ -1,12 +1,15 @@
 package com.example.Notes.noteFolder;
 
-import com.example.Notes.exception.NotFoundException;
+import com.example.Notes.Log.Log;
+import com.example.Notes.enumeration.LOG;
+import com.example.Notes.exception.NotesException;
 import com.example.Notes.user.User;
 import com.example.Notes.user.UserRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -20,7 +23,21 @@ public class NoteFolderService {
     }
 
     public NoteFolder findNoteFolderById(Long id){
-        return noteFolderRepo.findById(id).orElseThrow(()-> new NotFoundException("Note folder by id " + id + " was not found."));
+        //Sto cercando una cartella per ID, deve essere presente a meno che non venga eliminata nel frattempo.
+        Optional <NoteFolder> noteFolder = noteFolderRepo.findById(id);
+        if(noteFolder.isEmpty()){
+            String msg = "Note Folder with id " + id + " not found.";
+            Log.WriteLog(LOG.ERROR, msg);
+            throw new NotesException(msg);
+        }
+        var noteFolderBuilded = NoteFolder.builder()
+                .id(noteFolder.get().getId())
+                .title(noteFolder.get().getTitle())
+                .createdAt(noteFolder.get().getCreatedAt())
+                .deleted(noteFolder.get().isDeleted())
+                .notes(noteFolder.get().getNotes())
+                .build();
+        return noteFolderBuilded;
     }
 
     public List<NoteFolder> findNoteFolderByTitle(String title){
